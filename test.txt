@@ -1,0 +1,263 @@
+Task 1:Which a python program to import and export data using panda's library 
+import pandas as pd 
+import numpy as np 
+data1 = pd.read_csv("Iris.csv") 
+data1.head() 
+data2 = pd.read_csv("Iris.csv",usecols=['sepal-length']) 
+data2 
+data3 = pd.read_csv("Iris.csv",index_col=['sepal-length']) 
+data3 
+data4 = pd.read_csv("Iris.csv",names=['sepal-length']) 
+data4 
+Task 2:Demonstrate various data preprocessing technique for given data set 
+import pandas as pd 
+import numpy as np 
+from sklearn.impute import SimpleImputer 
+df=pd.read_csv("Iris.csv") 
+x=df.iloc[:,:4].values 
+y=df.iloc[:,-1].values 
+print(x,y) 
+imputer = SimpleImputer(strategy='mean') 
+imputer = imputer.fit(x) 
+x=imputer.transform(x) 
+print(x) 
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder 
+le=LabelEncoder() 
+y=le.fit_transform(y) 
+y 
+one=OneHotEncoder(sparse_output=False) 
+y=one.fit_transform(y.reshape(-1,1)) 
+y 
+Task 3:Implementation of dimensionality reduction using PCA 
+pip install scikit-learn 
+import pandas as pd 
+import numpy as np 
+from sklearn.datasets import load_breast_cancer 
+cancer= load_breast_cancer() 
+type(cancer) 
+print(cancer.DESCR) 
+df=pd.DataFrame(cancer['data'],columns=cancer['feature_names']) 
+df.head() 
+from sklearn.preprocessing import StandardScaler 
+se=StandardScaler() 
+df=se.fit_transform(df) 
+df 
+from sklearn.decomposition import PCA 
+pca=PCA(n_components=2) 
+data=pca.fit_transform(df) 
+data 
+TASK 4:Write a python program to demonstrate various Data visualization technique 
+import pandas as pd 
+import numpy as np 
+import matplotlib.pyplot as plt 
+df=pd.read_csv("ToyotaCorolla.csv") 
+df.head(10) 
+plt.title("Scatter plot") 
+plt.scatter(df['Price'],df['Age_08_04']) 
+plt.show() 
+plt.title("Histogram of KM") 
+plt.hist(df['KM'], color='red', edgecolor="white",bins=5) 
+plt.scatter(df['Age_08_04'],df['Price'],c=df['Met_Color'],s=df['Met_Color']) 
+TASK 5: Implement simple regression 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.linear_model import LinearRegression 
+df=pd.read_csv("50_Startups.csv") 
+df.head(5) 
+x=df.iloc[:,0:4] 
+y=df.iloc[:,4] 
+states=pd.get_dummies(x['State'],drop_first=True) 
+x=x.drop('State',axis=1) 
+x=pd.concat([x,states],axis=1) 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.25) 
+linear=LinearRegression() 
+linear.fit(x_train,y_train) 
+y_pred=linear.predict(x_test) 
+from sklearn.metrics import r2_score 
+r2_score(y_test,y_pred) 
+TASK 6: Develop a logistic regression model for given Dataset 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.linear_model import LogisticRegression 
+df=pd.read_csv("insurance_data.csv") 
+df.head(5) 
+plt.scatter(df.age,df.bought_insurance,marker='+',color='red') 
+x_train,x_test,y_train,y_test=train_test_split(df[['age']],df.bought_insurance,test_size=0.1) 
+df.shape 
+model=LogisticRegression() 
+model.fit(x_train,y_train) 
+model.predict(x_test) 
+model.score(x_test,y_test) 
+model.predict_proba(x_test) 
+TASK 7: Decision Tree classifier 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.datasets import load_iris 
+from sklearn import tree 
+from sklearn.tree import DecisionTreeClassifier 
+import seaborn as sns 
+iris=load_iris() 
+df=sns.load_dataset('iris') 
+x=df.iloc[:,:-1] 
+y=iris.target 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.33) 
+tree_model=DecisionTreeClassifier(max_depth=2) 
+tree_model.fit(x_train,y_train) 
+plt.figure(figsize=(10,10)) 
+tree.plot_tree(tree_model,filled=True) 
+plt.show 
+y_pred=tree_model.predict(x_test) 
+from sklearn.metrics import accuracy_score, classification_report 
+print(accuracy_score(y_pred,y_test)) 
+print(classification_report(y_pred,y_test)) 
+TASK 8: Naive Bayes 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.datasets import load_iris 
+from sklearn.naive_bayes import GaussianNB 
+import seaborn as sns 
+irir=load_iris() 
+df=sns.load_dataset('iris') 
+x=df.iloc[:,:-1] 
+y=iris.target 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.33) 
+naive=GaussianNB() 
+naive.fit(x_train,y_train) 
+y_pred=naive.predict(x_test) 
+from sklearn.metrics import accuracy_score,classification_report 
+print(accuracy_score(y_pred,y_test)) 
+print(classification_report(y_pred,y_test)) 
+TASK 9:KNN 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn.datasets import load_iris 
+from sklearn.neighbors import KNeighborsClassifier 
+import seaborn as sns 
+iris=load_iris() 
+df=sns.load_dataset('iris') 
+x=df.iloc[:,:-1] 
+y=iris.target 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2) 
+knn=KNeighborsClassifier(n_neighbors=5) 
+knn.fit(x_train,y_train) 
+y_pred=knn.predict(x_test) 
+from sklearn.metrics import accuracy_score, confusion_matrix 
+print(accuracy_score(y_test,y_pred)) 
+print(confusion_matrix(y_test,y_pred)) 
+ 
+TASK 10: Back Propagation 
+from tensorflow.keras.datasets import fashion_mnist 
+from tensorflow.keras.models import Sequential 
+from tensorflow.keras.layers import Dense, Dropout, Input 
+from tensorflow.keras.utils import to_categorical 
+import numpy as np 
+(x_train,y_train),(x_test,y_test)=fashion_mnist.load_data() 
+x_train= x_train/255.0 
+x_test=x_test/255.0 
+x_train= x_train.reshape(x_train.shape[0],-1) 
+x_test = x_test.reshape(x_test.shape[0],-1) 
+y_train=to_categorical(y_train,10) 
+y_test=to_categorical(y_test,10) 
+model=Sequential( 
+    [ 
+        Input(shape=(784,)), 
+        Dense(128,activation="relu"), 
+        Dropout(0.2), 
+        Dense(10,activation="softmax") 
+    ] 
+) 
+model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy']) 
+model.fit(x_train,y_train,epochs=5,validation_data=(x_test,y_test)) 
+test_loss, acc=model.evaluate(x_test,y_test) 
+print(f"Accuracy {acc*100}%") 
+y_pred=model.predict(x_test) 
+y_pred_class=np.argmax(y_pred,axis=1) 
+y_true=np.argmax(y_test,axis=1) 
+print("Confusion matrix:") 
+print(confusion_matrix(y_pred_class,y_true)) 
+print(classification_report(y_true,y_pred_class,target_names=['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 
+                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'],zero_division=0)) 
+  
+TASK 11: A. Random forest 
+import numpy as np 
+import pandas as pd 
+from sklearn.model_selection import train_test_split 
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn.metrics import accuracy_score 
+from sklearn.datasets import load_iris 
+data = load_iris() 
+X = data.data 
+y = data.target 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) 
+rf_clf = RandomForestClassifier(n_estimators=100, random_state=42) 
+rf_clf.fit(X_train, y_train) 
+y_pred = rf_clf.predict(X_test) 
+y_pred 
+accuracy = accuracy_score(y_test, y_pred) 
+print(f"Accuracy of Random Forest classifier: {accuracy * 100:.2f}%") 
+TASK 11: B. Boosting ensemble 
+import numpy as np 
+import pandas as pd 
+from sklearn.model_selection import train_test_split 
+from sklearn.ensemble import AdaBoostClassifier 
+from sklearn.tree import DecisionTreeClassifier 
+from sklearn.metrics import accuracy_score 
+from sklearn.datasets import load_iris 
+data = load_iris() 
+X = data.data 
+y = data.target 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) 
+from sklearn.ensemble import AdaBoostClassifier 
+from sklearn.tree import DecisionTreeClassifier 
+base_estimator = DecisionTreeClassifier(max_depth=1) 
+ada_clf = AdaBoostClassifier(estimator=base_estimator, n_estimators=50, learning_rate=1.0, random_state=42) 
+ada_clf.fit(X_train, y_train) 
+y_pred = ada_clf.predict(X_test) 
+accuracy = accuracy_score(y_test, y_pred) 
+print(f"Accuracy of AdaBoost classifier: {accuracy * 100:.2f}%") 
+TASK 12: A. K Means clustering 
+import numpy as np 
+import pandas as pd 
+from sklearn.cluster import KMeans 
+import matplotlib.pyplot as plt 
+from sklearn.datasets import make_blobs 
+data,clu = make_blobs(n_samples=100) 
+sse = [] 
+k_range = range(1, 11) 
+for k in k_range: 
+kmeans = KMeans(n_clusters=k, random_state=42) 
+kmeans.fit(data) 
+sse.append(kmeans.inertia_) 
+plt.figure(figsize=(8, 5)) 
+plt.plot(k_range, sse, marker='o') 
+plt.xlabel('Number of clusters (k)') 
+plt.ylabel('Sum of squared distances (SSE)') 
+plt.title('Elbow Method For Optimal k') 
+plt.show() 
+optimal_k = 3 
+kmeans = KMeans(n_clusters=optimal_k, random_state=42) 
+kmeans.fit(data) 
+clusters = kmeans.labels_ 
+plt.figure(figsize=(8, 5)) 
+plt.scatter(data[:, 0], data[:, 1], c=clusters, cmap='viridis') 
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=100, c='red', marker='x') 
+plt.xlabel('x') 
+plt.ylabel('y') 
+plt.title('K-means Clustering') 
+plt.show() 
+TASK 12: B. BIRCH algorithms 
+import matplotlib.pyplot as plt 
+from sklearn.datasets import make_blobs 
+from sklearn.cluster import Birch 
+import numpy as np 
+dataset,clu = make_blobs(n_samples = 1500) 
+model = Birch(n_clusters=4) 
+model.fit(dataset) 
+pred = model.predict(dataset) 
+plt.scatter(dataset[:, 0], dataset[:, 1], c = pred, cmap = 'viridis') 
+plt.show() 
